@@ -154,11 +154,11 @@ The fingerprints stored via *Recipients*' `pubkeyFingerprints` MUST refer to pub
 
 ### Writing an RO-Crate with encrypted Entities
 
-![Writing an RO-Crate containing encrypted elements to disk](EncryptedRO-Crate.drawio(1).svg)
+![Writing an RO-Crate containing encrypted elements to disk](EncryptedRO-Crate.svg)
 
 ### Reading an RO-Crate with encrypted Entities
 
-![Reading an RO-Crate that contains encrypted elements](ReadingEncryptedRO-Crate.drawio(1).svg)
+![Reading an RO-Crate that contains encrypted elements](ReadingEncryptedRO-Crate.svg)
 
 ### Signatures
 (TBD)
@@ -171,49 +171,73 @@ A minimal example of _GPG Crate_ metadata, containing example sensitive banking 
 #### As written to disk (after encryption)
 ```json
 {
+    "@context": "https://w3id.org/ro/crate/1.1/context",
+    "@graph": [
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "datePublished": "2024-09-25T22:02:03+00:00"
+        },
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            },
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/crate/1.1"
+            }
+        },
+        {
+            "@id": "https://orcid.org/0000-0001-7760-1240",
+            "@type": "Person",
+            "email": "JCarberry@psychoceramics.brown.com",
+            "keyserver": "https://keyserver.ubuntu.com",
+            "name": "Josiah Carberry",
+            "pubkey_fingerprints": "A86F04EAD1342A90F538ED7F0221D767C9AEE494"
+        },
+        {
+            "@id": "https://orcid.org/0000-0004-1818-0000",
+            "@type": "Person",
+            "email": "Jlove@github.com",
+            "keyserver": "https://keyserver.ubuntu.com",
+            "name": "JLove",
+            "pubkey_fingerprints": "93B72373820DDB104BC6859474CBFBAB503F3CF3"
+        },
+        {
+            "@id": "#Encrypted_MessageA86F04EAD1342A90F538ED7F0221D767C9AEE494",
+            "@type": [
+                "SendAction",
+                "EncryptedGraphMessage"
+            ],
+            "actionStatus": "PotentialActionStatus",
+            "deliveryMethod": "https://doi.org/10.17487/RFC4880",
+            "encryptedGraph": "-----BEGIN PGP MESSAGE-----\n\nhF4DVhe2+C+HB+0SAQdAzFc3uYBXXvfuoOWThBCyy+Hlae6JFhil9yH3KxDIjzow\nMHq3CsQhwqr9qDrQASCVDu1pICHczxF9ySj2gIlkXGZ701QRLpiHqGuA4ygFKFUs\n1MCIAQkCEB/dXpQeMH/v2Qet1e+gibfpilFVQKYfRYIvZeT4TZ7KuwHHn2ylI2pH\nsQe/RUshmneAyzyE70sYvXxJuXZXJfaS8/dAw1spVvtqCjG7Fm3jIXITmFW8XLnA\nG+YrAJHTWDCPmkeMYDeLhybEG5FKgmk0ZsHjbfSRMhfaKa2wptUIKsCnyNAHh0ln\n98bMt3R14REeFuJIvzss61/WXWFf8jfyzGzDsapebr/bfGv/YhI5u2uu0Q+MfjKL\npeyRPmCz1IWaCxN2JvCHee9oYUJJPJ7ql1Jg7cwVzjLDdm+CwkvMccrLcf9b88WL\neTq0gTfi/KJIDsayHEPYPJZKrpiEtbHZeOq2lShHPpX/qqUQB0rptlZ5brq588q7\nrBl+DpTPkRmutXemBq7OLbBw33A+3jJMbEQRVFOzEqXRoyOtJgNj3EPZ6w==\n=vc2Q\n-----END PGP MESSAGE-----\n",
+            "recipients": [
+                {
+                    "@id": "https://orcid.org/0000-0001-7760-1240"
+                }
+            ]
+        },
+        {
+            "@id": "#Encrypted_Message93B72373820DDB104BC6859474CBFBAB503F3CF3_A86F04EAD1342A90F538ED7F0221D767C9AEE494",
+            "@type": [
+                "SendAction",
+                "EncryptedGraphMessage"
+            ],
+            "actionStatus": "PotentialActionStatus",
+            "deliveryMethod": "https://doi.org/10.17487/RFC4880",
+            "encryptedGraph": "-----BEGIN PGP MESSAGE-----\n\nhF4DV/haefcwdMcSAQdAoKdyS9NBV6cXRw7oAYrWdfAXvhS6XSOnTav8H+IObwUw\nZhM6tfPBOiZQP4aQ5u/r222RZb/kdWyIm4Z88riSawm/Q6HgGOw61o4aqIpbFN3A\nhF4DVhe2+C+HB+0SAQdAdIAFPbC8ykXunE7NPG0WUL2uQLzRYrGc2AyCX0I8P3Iw\nRXlmAKkVZIy32KFVLW5LCI4aZvuE85csjqmX5tuXGNlmgqzIkcsTD2x/WAz2oqGQ\n1MBnAQkCENeUCJO2Pv/9lGTd2RXZAr5DvtvtWIZX+JvS2TkCxw1LPZ5kB/xWt/gQ\nNIzYqoM0s6g4MMXkON/ezZ7gU2Cqc+FaFflbtuAkN3telMZECcm7BIIp8fkFlHYe\nbE1d40tAq6ZEIfWKOykdNxjDqV3Va3+Ue+ZDUkte82SQnyO2xY1gYdk9VMGWbyDM\nYiuzbMEzZtyiwRWgHXag0jml4yQBMwCWHkLSrq5iyZVo+igQ+X3GXgpj3SD27Ef2\nKj/kdwxvhjH3nZovzT8eRipO42nvt6Gck4XGpRnNpX5uminNmCwjxz1obykj06oe\nbSP1Fk7D733wlv2JIJTr2804w0K+c7DbNX86/4ROaaiMnceKKL2IqAyeU5m6t4dj\nNMzgX3jvUtnA/w==\n=nUDI\n-----END PGP MESSAGE-----\n",
+"recipients": [
 {
-	"@context": "https://w3id.org/ro/crate/1.1/context",
-	"@graph": [
-    	{
-        	"@id": "./",
-        	"@type": "Dataset",
-        	"datePublished": "2024-09-17T23:46:39+00:00"
-    	},
-    	{
-        	"@id": "ro-crate-metadata.json",
-        	"@type": "CreativeWork",
-        	"about": {
-            	"@id": "./"
-        	},
-        	"conformsTo": [
-          	{"@id": "https://w3id.org/ro/crate/1.1"},
-          	{"@id": "THIS URL"}
-        	]
-    	},
-    	{
-        	"@id": "https://orcid.org/0000-0002-1825-0097",
-        	"@type": "Person",
-        	"email": "JCarberry@psychoceramics.brown.com",
-        	"name": "Josiah Carberry",
-        	"keyserver": "https://keyserver.ubuntu.com",
-        	"pubkeyFingerprints": "985E471827FEF4D193C2CDBF65322C25ED00AB00"
-    	},
-    	{
-        	"@id": "#Encrypted_Message985E471827FEF4D193C2CDBF65322C25ED00AB00",
-        	"@type": [
-            	"SendAction",
-            	"EncryptedGraphMessage"
-        	],
-        	"actionStatus": "PotentialActionStatus",
-        	"deliveryMethod": "https://doi.org/10.17487/RFC4880",
-        	"encryptedGraph": "-----BEGIN PGP MESSAGE-----\n\nhF4Dy9uOJGGmSI4SAQdApZDEDcRWXvcYyndH3YQJDaY3bFtoii/jAaYTw+g2sEsw\neY9h46EeGo3KIyD61wu4sTJLUFCihFoLzb3jzJuNmGzTAIIpZjwQSnZTmIOBf9+V\n1MBFAQkCENnCJLcOhqgchWNkv2HcyrK+//QVmRyICdK3DPaIPIJgzgI6fjGB3Ck+\nmn2HYbr29p1PiKv/ijeJ8jEa4CD0DXchjZzyQ8m5EDlZv9pscIwmYjppz0exyZKH\n/BYaSdGuI1xYcov3tdJNb87XspFq7e7Hg6E1K4x7EWoxM33CJHFP0MeyMGIjx8qg\nnXQUCEEVafxn8jxHrj0wU5bu22EOxCoZwFCgQmKakYUzs9BUzcKB5zeEE5xx0wlL\noOs3+qKuXdPWYoVIpLc6q7jhIeTZfcDrXXRWQBC2r8dhLjbTFHln1YkqCqv+fcCw\nUN7RhtYYK84q5PyS1iE5crquXrZaz1gd\n=rKbY\n-----END PGP MESSAGE-----\n",
-        	"recipients": [
-            	{
-                	"@id": "https://orcid.org/0000-0002-1825-0097"
-            	}
-        	]
-    	}
-	]
+	"@id": "https://orcid.org/0000-0004-1818-0000"
+},
+{
+	"@id": "https://orcid.org/0000-0001-7760-1240"
+}
+]
+        }
+    ]
 }
 ```
 
@@ -221,47 +245,68 @@ A minimal example of _GPG Crate_ metadata, containing example sensitive banking 
 
 ```json
 {
-	"@context": "https://w3id.org/ro/crate/1.1/context",
-	"@graph": [
-    	{
-        	"@id": "./",
-        	"@type": "Dataset",
-        	"datePublished": "2024-09-18T01:19:14+00:00"
-    	},
-    	{
-        	"@id": "ro-crate-metadata.json",
-        	"@type": "CreativeWork",
-        	"about": {
-            	"@id": "./"
-        	},
-        	"conformsTo": [
-          	{"@id": "https://w3id.org/ro/crate/1.1"},
-          	{"@id": "THIS URL"}
-        	]
-    	},
-    	{
-        	"@id": "https://orcid.org/0000-0002-1825-0097",
-        	"@type": "Person",
-        	"email": "JCarberry@psychoceramics.brown.com",
-        	"name": "Josiah Carberry",
-        	"keyserver": "https://keyserver.ubuntu.com",
-        	"pubkeyFingerprints": "985E471827FEF4D193C2CDBF65322C25ED00AB00"
-    	},
-    	{
-        	"@id": "#ExampleSensitiveDataBank",
-        	"@type": "BankAccount",
-        	"accountOverdraftLimit": "$50000000",
-        	"name": "Carberry Research Grant Account",
-        	"recipients": "https://orcid.org/0000-0002-1825-0097"
-    	},
-    	{
-        	"@id": "#ExampleSensitiveDataMedical",
-        	"@type": "MedicalCondition",
-        	"name": "Memory Bus Factor Syndrome",
-        	"naturalProgression": "full psychoceramic breakdown",
-        	"recipients": "https://orcid.org/0000-0002-1825-0097"
-    	}
-	]
+    "@context": "https://w3id.org/ro/crate/1.1/context",
+    "@graph": [
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "datePublished": "2024-09-25T22:02:03+00:00"
+        },
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            },
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/crate/1.1"
+            }
+        },
+        {
+            "@id": "https://orcid.org/0000-0001-7760-1240",
+            "@type": "Person",
+            "email": "JCarberry@psychoceramics.brown.com",
+            "keyserver": "https://keyserver.ubuntu.com",
+            "name": "Josiah Carberry",
+            "pubkey_fingerprints": "A86F04EAD1342A90F538ED7F0221D767C9AEE494"
+        },
+        {
+            "@id": "https://orcid.org/0000-0004-1818-0000",
+            "@type": "Person",
+            "email": "Jlove@github.com",
+            "keyserver": "https://keyserver.ubuntu.com",
+            "name": "JLove",
+            "pubkey_fingerprints": "93B72373820DDB104BC6859474CBFBAB503F3CF3"
+        },
+        {
+            "@id": "#ExampleSensitiveDataBank",
+            "@type": "BankAccount",
+            "accountOverdraftLimit": "$500000",
+            "name": "Carberry Research Grant Account",
+            "recipients": "https://orcid.org/0000-0001-7760-1240"
+        },
+        {
+            "@id": "#ExampleSensitiveDataMedical",
+            "@type": "MedicalCondition",
+            "name": "Memory Bus Factor Syndrome",
+            "naturalProgression": "full psychoceramic breakdown",
+            "recipients": "https://orcid.org/0000-0001-7760-1240"
+        },
+        {
+            "@id": "#ExampleSensitiveDataCode",
+            "@type": "SoftwareSourceCode",
+            "codeRepository": "https://github.com/UoA-eResearch/ro-crate-py/tree/encrypted-metadata",
+            "name": "Super Secret RO-Crate Repo",
+            "recipients": [
+                {
+                    "@id": "https://orcid.org/0000-0004-1818-0000"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0001-7760-1240"
+                }
+            ]
+        }
+    ]
 }
 ```
 
