@@ -25,7 +25,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   A profile description for GPG RO-Crates.
   GPG-RO-Crates encrypt individual elements of metadata to 
   protect sensitive information.
-baseurl: "/profile" # the subpath of your site, e.g. /blog
+baseurl: "/" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  JLoveUOA
 
