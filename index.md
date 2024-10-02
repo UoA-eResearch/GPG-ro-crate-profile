@@ -38,7 +38,7 @@ Any *EncryptedContextEntity*, *EncryptedGraphMessage* or *Recipient* MAY list th
 
 The Crate JSON-LD MUST be valid according to RO-Crate 1.1 and SHOULD use the RO-Crate 1.1 `@context` https://w3id.org/ro/crate/1.1/context
 
-Additional Terms are described at https://github.com/UoA-eResearch/ro-terms-gpg/blob/master/gpg/context.json and these terms SHOULD be provided via '@context`.
+Preliminary additional Terms are described via a fork of [ro-terms](https://github.com/UoA-eResearch/ro-terms-gpg/blob/master/gpg/context.json) and these terms SHOULD be provided via `@context`.
 
 ## Encrypted Context Entities
 
