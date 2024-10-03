@@ -56,9 +56,9 @@ Any *EncryptedContextEntity* MUST have a least one entity as a `recipient` and t
 
 Values specified in an *EncryptedContextEntity*'s `recipients` property SHOULD refer to other context entities within the graph via the standard `"recipients":[{"@id":"<id>"}]` format. *(they should not be raw strings or references to external files)*.
 
-Encrypted context entities MUST only exist in a decrypted state only while in memory.
+Encrypted context entities MUST only exist in a decrypted state while in memory.
 
-Once the crate is written to disk as `ro_crate_metadata.json` *EncryptedContextEntities* are aggregated based on common sets of `recipient` `pubkey_fingerprints` and written as the `encrypted_graph` property of an `EncryptedGraphMessage`.
+Once the crate is written to disk as `ro_crate_metadata.json` *EncryptedContextEntities* are aggregated based on common sets of `recipient` `pubkey_fingerprints` and written as the `"encryptedGraph"` property of an `EncryptedGraphMessage`.
 
 When data is decrypted from an *EncryptedGraphMessage* it MUST be decrypted into an *EncryptedContextEntity* it MAY be manually redesignated as a *Context Entity* later if the data is no longer to be encrypted.
 
@@ -131,10 +131,10 @@ The fingerprints stored via *Recipients*' `pubkey_fingerprints` MUST refer to pu
 ### Reading an RO-Crate with encrypted Entities
 
 ![Reading an RO-Crate that contains encrypted elements](ReadingEncryptedRO-Crate.svg)
-
+<!-- 
 ### Signatures
 (TBD)
-
+ -->
 
 
 ### ro-crate-metadata.jsonld Example
