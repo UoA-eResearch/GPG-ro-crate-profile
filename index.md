@@ -131,10 +131,7 @@ The fingerprints stored via *Recipients*' `pubkey_fingerprints` MUST refer to pu
 ### Reading an RO-Crate with encrypted Entities
 
 ![Reading an RO-Crate that contains encrypted elements](ReadingEncryptedRO-Crate.svg)
-<!-- 
-### Signatures
-(TBD)
- -->
+
 
 
 ### ro-crate-metadata.jsonld Example
