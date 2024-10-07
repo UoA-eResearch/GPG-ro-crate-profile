@@ -19,9 +19,10 @@ Based on : [https://github.com/workflowhub-eu/about/tree/master/Workflow-RO-Crat
 
 
 
-_GPG RO-Crate_ is an extension of [_RO-Crate_](https://researchobject.github.io/ro-crate/) for storing and transmitting sensitive metadata. It depends on [GnuPGP(GPG)](https://gnupg.org/) for encryption and key management.
+_GPG RO-Crate_ is an extension of [_RO-Crate_](https://researchobject.github.io/ro-crate/) for storing and transmitting sensitive metadata.
 
-The encryption and decryption processes described in this profile are implemented as part of https://github.com/UoA-eResearch/ro-crate-py/tree/encrypted-metadata.
+The encryption and decryption processes described in this profile are implemented as part of (https://github.com/UoA-eResearch/ro-crate-py/tree/encrypted-metadata)[https://github.com/UoA-eResearch/ro-crate-py/tree/encrypted-metadata].
+The current implementation depends on [GnuPGP(GPG)](https://gnupg.org/) for encryption and key management.
 
 ## Concepts
 
@@ -32,13 +33,13 @@ This section uses terminology from the [RO-Crate 1.1 specification](https://w3id
 
 The Metadata File Descriptor `conformsTo` MUST be a list that contains at least this profile and the RO-Crate profile `"https://w3id.org/ro/crate/1.1"`.
 
-Any *EncryptedContextEntity*, *EncryptedGraphMessage* or *Recipient* MAY list this profile via `conformsTo`.
+Any *EncryptedContextEntity*, *EncryptedGraphMessage* or *Recipient* specified via *encryptedTo*  MAY list this profile via `conformsTo`.
 
 ## Context
 
 The Crate JSON-LD MUST be valid according to RO-Crate 1.1 and SHOULD use the RO-Crate 1.1 `@context` https://w3id.org/ro/crate/1.1/context
 
-Preliminary additional Terms are described via a fork of [ro-terms](https://github.com/UoA-eResearch/ro-terms-gpg/blob/master/gpg/context.json) and these terms SHOULD be provided via `@context`.
+Preliminary additional Terms are described via a fork of [ro-terms](https://github.com/UoA-eResearch/ro-terms-gpg/blob/master/gpg/context.json) under the `openpgp` namespace and these terms SHOULD be provided via `@context`.
 
 ## Encrypted Context Entities
 
@@ -52,13 +53,13 @@ If a data entity has associated sensitive metadata these SHOULD be created as se
 
 Any *EncryptedContextEntity* MAY OPTIONALLY contain `EncryptedContextEntity` in its type. *(as almost any type of entity MAY be an encryptedcontextentity with their original typing to be retained unchanged, for this reason EncryptedContextEntities SHOULD be defined programmatically in the library writing or reading the crate rather by their @type)*.
 
-Any *EncryptedContextEntity* MUST have a least one entity as a `recipient` and that *recipient* MUST have at least one valid gpg public key fingerprint listed via the `pubkey_fingerprints` property.
+Any *EncryptedContextEntity* MUST have a least one entity as a `encryptedTo` and that *encryptedTo* recipient MUST have at least one valid gpg public key fingerprint listed via the `pubkey_fingerprints` property.
 
-Values specified in an *EncryptedContextEntity*'s `recipients` property SHOULD refer to other context entities within the graph via the standard `"recipients":[{"@id":"<id>"}]` format. *(they should not be raw strings or references to external files)*.
+Values specified in an *EncryptedContextEntity*'s `encryptedTo` property SHOULD refer to other context entities within the graph via the standard `"encryptedTo":[{"@id":"<id>"}]` format. *(they should not be raw strings or references to external files)*.
 
 Encrypted context entities MUST only exist in a decrypted state while in memory.
 
-Once the crate is written to disk as `ro_crate_metadata.json` *EncryptedContextEntities* are aggregated based on common sets of `recipient` `pubkey_fingerprints` and written as the `"encryptedGraph"` property of an `EncryptedGraphMessage`.
+Once the crate is written to disk as `ro_crate_metadata.json` *EncryptedContextEntities* are aggregated based on common sets of `encryptedTo`'s members' `pubkey_fingerprints` and written as the `"encryptedGraph"` property of an `EncryptedGraphMessage`.
 
 When data is decrypted from an *EncryptedGraphMessage* it MUST be decrypted into an *EncryptedContextEntity* it MAY be manually redesignated as a *Context Entity* later if the data is no longer to be encrypted.
 
@@ -72,7 +73,7 @@ An *EncryptedGraphMessage* MUST be of the type `["SendAction", "EncryptedGraphMe
 
 If an encrypted string is present it must be stored as an `"encryptedGraph"`. This MUST be a PGP Encrypted Message as described in 11.3 of the [PGP standard](https://www.ietf.org/rfc/rfc4880.txt).
 
-Encrypted messages stored via `"encryptedGraph"` MUST be an aggregation of *EncryptedGraphMessage*s that share a complete set of public keys across each of their recipients. They are aggregated by serialising the a list containing the JSON representation of each *EncryptedGraphMessage*.
+Encrypted messages stored via `"encryptedGraph"` MUST be an aggregation of *EncryptedGraphMessage*s that share a complete set of public keys across each of the entities listed via `encryptedTo`. They are aggregated by serialising the a list containing the JSON representation of each *EncryptedGraphMessage*.
 
 The raw JSON representation of each *EncryptedGraphMessage* encrypted as part of an `"encryptedGraph"` MUST be a JSON string that can be read as a valid RO-Crate Entity.
 
@@ -102,25 +103,25 @@ An *EncryptedGraphMessage* SHOULD record the encryption message format of the me
 
 The `deliveryMethod` property of an *EncryptedGraphMessage* SHOULD point to a URI of a standard or documentation that provides context to identify the message stored in `'encryptedGraph"` format, this SHOULD be sufficient to determine a decryption method for the message. For example "https://doi.org/10.17487/RFC4880" for PGP encrypted messages.
 
-Any *EncryptedGraphMessage* MUST list all `"recipients"` matching the complete set of `"recipients"` of any *EncryptedContextEntities* that were aggregated and encrypted as part of the *EncryptedGraphMessage*.
+Any *EncryptedGraphMessage* MUST list all `"encryptedTo"` recipients matching the complete set of `"encryptedTo"` entities of any *EncryptedContextEntities* that were aggregated and encrypted as part of the *EncryptedGraphMessage*.
 
-Values specified in an *EncryptedGraphMessage*s `"recipients"` property SHOULD refer to other context entities within the graph via the `"recipients":[{"@id":"<id>"}]` format. *(they should not be raw strings or references to external files)*
+Values specified in an *EncryptedGraphMessage*s `"encryptedTo"` property SHOULD refer to other context entities within the graph via the `"encryptedTo":[{"@id":"<id>"}]` format. *(they should not be raw strings or references to external files)*
 
-`"recipients"` of an  *EncryptedGraphMessage* SHOULD refer to the complete set of private key holders that are able to decrypt the message stored in `"encryptedGraph"`. They MAY list contact information to identify these individuals and  MAY identify their public keys via `"pubkey_fingerprints".
+`"encryptedTo"` of an  *EncryptedGraphMessage* SHOULD refer to the complete set of private key holders that are able to decrypt the message stored in `"encryptedGraph"`. They MAY list contact information to identify these individuals and  MAY identify their public keys via `"pubkey_fingerprints".
 
-## Recipients
+## encryptedTo Recipients
 
-A *Recipient* SHOULD be of the type `"ContactPoint"` `"Person"` and/or `"Audience"`.
+An `encryptedTo` *Recipient* SHOULD be of the type `"ContactPoint"` `"Person"` and/or `"Audience"`.
 
-*Recipients* of *EncryptedGraphMessage*s and *EncryptedContextEntities* MUST be referred to via the `"recipients"` property.
+`encryptedTo` *Recipients* of *EncryptedGraphMessage*s and *EncryptedContextEntities* MUST be referred to via the `"encryptedTo"` property.
 
-*Recipients*  and MAY refer back to a*EncryptedGraphMessage*s and *EncryptedContextEntities* using the `"recipientOf"` property.
+`encryptedTo` *Recipients*  and MAY refer back to a*EncryptedGraphMessage*s and *EncryptedContextEntities* using the `"encryptedTo"` property.
 
-*Recipients* of *EncryptedGraphMessage*s and *EncryptedContextEntities* MUST store at least one public key fingerprint via the `pubkey_fingerprints` property.
+`encryptedTo` *Recipients* of *EncryptedGraphMessage*s and *EncryptedContextEntities* MUST store at least one public key fingerprint via the `pubkey_fingerprints` property.
 
-The fingerprints stored via *Recipients*' `pubkey_fingerprints` MUST refer to public keys accessible to the system writing the *crate* either locally or via a keyserver.
+The fingerprints stored via an `encryptedTo` *Recipient*'s' `pubkey_fingerprints` MUST refer to public keys accessible to the system writing the *crate* either locally or via a keyserver.
 
-*Recipients* MAY list a keyserver from which the public keys matching their `pubkey_fingerprints` can be retrieved via `keyserver`.
+`encryptedTo` *Recipients* MAY list a keyserver from which the public keys matching their `pubkey_fingerprints` can be retrieved via `keyserver` as a URL.
 
 ## Summary: Reading and Writing a GPG-Crate 
 
@@ -182,7 +183,7 @@ A minimal example of _GPG Crate_ metadata, containing example sensitive banking 
             "actionStatus": "PotentialActionStatus",
             "deliveryMethod": "https://doi.org/10.17487/RFC4880",
             "encryptedGraph": "-----BEGIN PGP MESSAGE-----\n\nhF4DVhe2+C+HB+0SAQdAzFc3uYBXXvfuoOWThBCyy+Hlae6JFhil9yH3KxDIjzow\nMHq3CsQhwqr9qDrQASCVDu1pICHczxF9ySj2gIlkXGZ701QRLpiHqGuA4ygFKFUs\n1MCIAQkCEB/dXpQeMH/v2Qet1e+gibfpilFVQKYfRYIvZeT4TZ7KuwHHn2ylI2pH\nsQe/RUshmneAyzyE70sYvXxJuXZXJfaS8/dAw1spVvtqCjG7Fm3jIXITmFW8XLnA\nG+YrAJHTWDCPmkeMYDeLhybEG5FKgmk0ZsHjbfSRMhfaKa2wptUIKsCnyNAHh0ln\n98bMt3R14REeFuJIvzss61/WXWFf8jfyzGzDsapebr/bfGv/YhI5u2uu0Q+MfjKL\npeyRPmCz1IWaCxN2JvCHee9oYUJJPJ7ql1Jg7cwVzjLDdm+CwkvMccrLcf9b88WL\neTq0gTfi/KJIDsayHEPYPJZKrpiEtbHZeOq2lShHPpX/qqUQB0rptlZ5brq588q7\nrBl+DpTPkRmutXemBq7OLbBw33A+3jJMbEQRVFOzEqXRoyOtJgNj3EPZ6w==\n=vc2Q\n-----END PGP MESSAGE-----\n",
-            "recipients": [
+            "encryptedTo": [
                 {
                     "@id": "https://orcid.org/0000-0001-7760-1240"
                 }
@@ -197,7 +198,7 @@ A minimal example of _GPG Crate_ metadata, containing example sensitive banking 
             "actionStatus": "PotentialActionStatus",
             "deliveryMethod": "https://doi.org/10.17487/RFC4880",
             "encryptedGraph": "-----BEGIN PGP MESSAGE-----\n\nhF4DV/haefcwdMcSAQdAoKdyS9NBV6cXRw7oAYrWdfAXvhS6XSOnTav8H+IObwUw\nZhM6tfPBOiZQP4aQ5u/r222RZb/kdWyIm4Z88riSawm/Q6HgGOw61o4aqIpbFN3A\nhF4DVhe2+C+HB+0SAQdAdIAFPbC8ykXunE7NPG0WUL2uQLzRYrGc2AyCX0I8P3Iw\nRXlmAKkVZIy32KFVLW5LCI4aZvuE85csjqmX5tuXGNlmgqzIkcsTD2x/WAz2oqGQ\n1MBnAQkCENeUCJO2Pv/9lGTd2RXZAr5DvtvtWIZX+JvS2TkCxw1LPZ5kB/xWt/gQ\nNIzYqoM0s6g4MMXkON/ezZ7gU2Cqc+FaFflbtuAkN3telMZECcm7BIIp8fkFlHYe\nbE1d40tAq6ZEIfWKOykdNxjDqV3Va3+Ue+ZDUkte82SQnyO2xY1gYdk9VMGWbyDM\nYiuzbMEzZtyiwRWgHXag0jml4yQBMwCWHkLSrq5iyZVo+igQ+X3GXgpj3SD27Ef2\nKj/kdwxvhjH3nZovzT8eRipO42nvt6Gck4XGpRnNpX5uminNmCwjxz1obykj06oe\nbSP1Fk7D733wlv2JIJTr2804w0K+c7DbNX86/4ROaaiMnceKKL2IqAyeU5m6t4dj\nNMzgX3jvUtnA/w==\n=nUDI\n-----END PGP MESSAGE-----\n",
-            "recipients": [
+            "encryptedTo": [
                 {
                     "@id": "https://orcid.org/0000-0004-1818-0000"
                 },
@@ -252,21 +253,21 @@ A minimal example of _GPG Crate_ metadata, containing example sensitive banking 
             "@type": "BankAccount",
             "accountOverdraftLimit": "$500000",
             "name": "Carberry Research Grant Account",
-            "recipients": "https://orcid.org/0000-0001-7760-1240"
+            "encryptedTo": "https://orcid.org/0000-0001-7760-1240"
         },
         {
             "@id": "#ExampleSensitiveDataMedical",
             "@type": "MedicalCondition",
             "name": "Memory Bus Factor Syndrome",
             "naturalProgression": "full psychoceramic breakdown",
-            "recipients": "https://orcid.org/0000-0001-7760-1240"
+            "encryptedTo": "https://orcid.org/0000-0001-7760-1240"
         },
         {
             "@id": "#ExampleSensitiveDataCode",
             "@type": "SoftwareSourceCode",
             "codeRepository": "https://github.com/UoA-eResearch/ro-crate-py/tree/encrypted-metadata",
             "name": "Super Secret RO-Crate Repo",
-            "recipients": [
+            "encryptedTo": [
                 {
                     "@id": "https://orcid.org/0000-0004-1818-0000"
                 },
@@ -291,13 +292,13 @@ Decrypts to exactly the string:
 	"@type": "BankAccount",
 	"accountOverdraftLimit": "$500000",
 	"name": "Carberry Research Grant Account",
-	"recipients": "https://orcid.org/0000-0002-1825-0097"
+	"encryptedTo": "https://orcid.org/0000-0002-1825-0097"
 },
 {
 	"@id": "#ExampleSensitiveDataMedical",
 	"@type": "MedicalCondition",
 	"name": "Memory Bus Factor Syndrome",
 	"naturalProgression": "full psychoceramic breakdown",
-	"recipients": "https://orcid.org/0000-0002-1825-0097"
+	"encryptedTo": "https://orcid.org/0000-0002-1825-0097"
 }"
 ```
