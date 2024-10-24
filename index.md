@@ -2,11 +2,10 @@ Based on : [https://github.com/workflowhub-eu/about/tree/master/Workflow-RO-Crat
 
 # OpenPGP Crate
 
-<!-- ![OpenPGP RO-Crate]({{ '/assets/img/ro-crate-workflow.svg' | relative_url }})  -->
 
-* Permalink: [10.17608/k6.auckland.27288519](10.17608/k6.auckland.27288519)
+* Permalink: [https://doi.org/10.17608/k6.auckland.27288519.v1](10.17608/k6.auckland.27288519)
 * Version: [1.0.0](https://github.com/UoA-eResearch/ro-crate-py/pull/1)
-* Context and Crate described in [PGP-Crate Whitepaper ]
+* Context and Crate described in [PGP-Crate Whitepaper https://doi.org/10.17608/k6.auckland.27288039.v1](https://auckland.figshare.com/articles/standard/OpenPGP-Crate_Whitepaper/27288039?file=49952826)
 
 
 
@@ -22,7 +21,7 @@ This section uses terminology from the [RO-Crate 1.1 specification](https://w3id
 
 ## Conforms To
 
-The Metadata File Descriptor `conformsTo` MUST be a list that contains at least this profile and the RO-Crate profile `"https://w3id.org/ro/crate/1.1"`.
+The Metadata File Descriptor `conformsTo` MUST be a list that contains at least this profile`"https://doi.org/10.17608/k6.auckland.27288519.v1"` and the RO-Crate profile `"https://w3id.org/ro/crate/1.1"`.
 
 Any *EncryptedContextEntity*, *EncryptedGraphMessage* or *Recipient* specified via *encryptedTo*  MAY list this profile via `conformsTo`.
 
@@ -145,9 +144,14 @@ A minimal example of _OpenPGP Crate_ metadata, containing example sensitive bank
             "about": {
                 "@id": "./"
             },
-            "conformsTo": {
+            "conformsTo": [
+            {
                 "@id": "https://w3id.org/ro/crate/1.1"
             }
+            {
+                "@id": "https://doi.org/10.17608/k6.auckland.27288519.v1"
+            }
+            ]
         },
         {
             "@id": "https://orcid.org/0000-0001-7760-1240",
@@ -219,9 +223,14 @@ A minimal example of _OpenPGP Crate_ metadata, containing example sensitive bank
             "about": {
                 "@id": "./"
             },
-            "conformsTo": {
+            "conformsTo": [
+            {
                 "@id": "https://w3id.org/ro/crate/1.1"
             }
+            {
+                "@id": "https://doi.org/10.17608/k6.auckland.27288519.v1"
+            }
+            ]
         },
         {
             "@id": "https://orcid.org/0000-0001-7760-1240",
