@@ -1,25 +1,16 @@
 Based on : [https://github.com/workflowhub-eu/about/tree/master/Workflow-RO-Crate](https://github.com/UoA-eResearch/ro-crate-py/pull/1)
 
-# GPG Crate (DRAFT)
+# OpenPGP Crate
 
-<!-- ![GPG RO-Crate]({{ '/assets/img/ro-crate-workflow.svg' | relative_url }})  -->
+<!-- ![OpenPGP RO-Crate]({{ '/assets/img/ro-crate-workflow.svg' | relative_url }})  -->
 
-* Permalink: `TODO`
-* Version: [0.0.1](https://github.com/UoA-eResearch/ro-crate-py/pull/1)
-
-<!-- As Encrypted crates differ for how they are constructed in memory as opposed to how they are written on disk a profile crate is provided for each.
-* [Profile Crate - In Memory `ro-crate-metadata.json`](TODO)
-  - [Profile Crate preview](TODO)
-* [Profile Crate - On Disk `ro-crate-metadata.json`](TODO)
-  - [Profile Crate preview](TODO)
-* [Example RO-Crate - In Memory`ro-crate-metadata.json`](TODO)
-  - [Example RO-Crate profile preview](TODO)
-* [Example RO-Crate - On Disk `ro-crate-metadata.json`](TODO)
-  - [Example RO-Crate profile preview](TODO) -->
+* Permalink: [10.17608/k6.auckland.27288519](10.17608/k6.auckland.27288519)
+* Version: [1.0.0](https://github.com/UoA-eResearch/ro-crate-py/pull/1)
+* Context and Crate described in [PGP-Crate Whitepaper ]
 
 
 
-_GPG RO-Crate_ is an extension of [_RO-Crate_](https://researchobject.github.io/ro-crate/) for storing and transmitting sensitive metadata.
+_OpenPGP RO-Crate_ is an extension of [_RO-Crate_](https://researchobject.github.io/ro-crate/) for storing and transmitting sensitive metadata.
 
 The encryption and decryption processes described in this profile are implemented as part of (https://github.com/UoA-eResearch/ro-crate-py/tree/encrypted-metadata)[https://github.com/UoA-eResearch/ro-crate-py/tree/encrypted-metadata].
 The current implementation depends on [GnuPGP(GPG)](https://gnupg.org/) for encryption and key management.
@@ -123,7 +114,7 @@ The fingerprints stored via an `encryptedTo` *Recipient*'s' `pubkey_fingerprints
 
 `encryptedTo` *Recipients* MAY list a keyserver from which the public keys matching their `pubkey_fingerprints` can be retrieved via `keyserver` as a URL.
 
-## Summary: Reading and Writing a GPG-Crate 
+## Summary: Reading and Writing a OpenPGP-Crate 
 
 ### Writing an RO-Crate with encrypted Entities
 
@@ -136,7 +127,7 @@ The fingerprints stored via an `encryptedTo` *Recipient*'s' `pubkey_fingerprints
 
 
 ### ro-crate-metadata.jsonld Example
-A minimal example of _GPG Crate_ metadata, containing example sensitive banking and health information.
+A minimal example of _OpenPGP Crate_ metadata, containing example sensitive banking and health information.
 
 #### As written to disk (after encryption)
 ```json
